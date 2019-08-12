@@ -150,7 +150,7 @@ void keyPressed() {
     case 4:
       state = 3;
     default:
-      time = 1000;
+      time = 500;
     }
   }
 }
