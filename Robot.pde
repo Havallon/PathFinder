@@ -10,11 +10,13 @@ public class Robot implements Comparable{
   private int currentStep;
   private ArrayList<Integer> genome;
   private int id;
+  private boolean alive;
   
   public Robot(int amountStep, int id){
     this.amountStep = amountStep;
     this.currentStep = 0;
     this.id = id;
+    this.alive = true;
   }
   
   public void newGenome(ArrayList<Integer> genome){
@@ -109,9 +111,13 @@ public class Robot implements Comparable{
   }
   
   public double getFitness(){
-    int fitness = (this.collisionMap[this.me[0]][this.me[1]]);
-    
+    double fitness = (this.getSteps()+1.0)/(this.getDistance() + 1.0);
+    //fitness = 1-(1/(1+Math.exp(fitness)));   
     return fitness;
+  }
+  
+  public int getDistance(){
+    return this.collisionMap[this.me[0]][this.me[1]];  
   }
   
   public int[] getPosition(){
@@ -119,7 +125,15 @@ public class Robot implements Comparable{
   }
   
   public boolean canRun(){
-    return (this.currentStep < amountStep);
+    return (this.currentStep < this.amountStep && alive);
+  }
+  
+  public int getSteps(){
+    return (this.amountStep - this.currentStep);
+  }
+  
+  public boolean getTarget(){
+    return (me[0] == target[0] && me[1] == target[1]);
   }
   
   //0 - down
@@ -133,27 +147,51 @@ public class Robot implements Comparable{
       //println(currentStep+":"+step);
       currentStep++;
       if (step == 0){
-        if (this.me[1] == 7) return this.me;
-        if (this.map[this.me[0]][this.me[1]+1] == 1) return this.me;
+        if (this.me[1] == 7){
+          this.alive = false;
+          return this.me;
+        }
+        if (this.map[this.me[0]][this.me[1]+1] == 1){
+          this.alive = false;
+          return this.me;
+        }
         this.me[1]++;
         return this.me;
       }
       
       else if (step == 1){
-        if (this.me[0] == 7) return this.me;
-        if (this.map[this.me[0]+1][this.me[1]] == 1) return this.me;
+        if (this.me[0] == 7){
+          this.alive = false;
+          return this.me;
+        }
+        if (this.map[this.me[0]+1][this.me[1]] == 1){
+          this.alive = false;
+          return this.me;
+        }
         this.me[0]++;
         return this.me;
       }
       else if (step == 2){
-        if (this.me[1] == 0) return this.me;
-        if (this.map[this.me[0]][this.me[1]-1] == 1) return this.me;
+        if (this.me[1] == 0) {
+          this.alive = false;
+          return this.me;
+        }
+        if (this.map[this.me[0]][this.me[1]-1] == 1){
+          this.alive = false;
+          return this.me;
+        }
         this.me[1]--;
         return this.me;
       }
       else if (step == 3){
-        if (this.me[0] == 0) return this.me;
-        if (this.map[this.me[0]-1][this.me[1]] == 1) return this.me;
+        if (this.me[0] == 0) {
+          this.alive = false;
+          return this.me;
+        }
+        if (this.map[this.me[0]-1][this.me[1]] == 1){
+          this.alive = false;
+          return this.me;
+        }
         this.me[0]--;
         return this.me;
       }
@@ -167,6 +205,7 @@ public class Robot implements Comparable{
     this.me[0] = origin[0];
     this.me[1] = origin[1];
     this.currentStep = 0;
+    this.alive = true;
   }
   
   public ArrayList<Integer> getGenome(){
@@ -180,12 +219,12 @@ public class Robot implements Comparable{
     if (o instanceof Robot){
       Robot aux = (Robot) o;
       if (this.getFitness() > aux.getFitness()){
-        return 1;
-      }else{
         return -1;
+      }else{
+        return 1;
       }
     }else{
-      return -1;
+      return 1;
     }
   }
   

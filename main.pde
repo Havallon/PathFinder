@@ -37,17 +37,30 @@ void draw() {
     if (population.canRobotRun()){
       origin = population.run();
       delay(time);
+      if (population.didRobotGetTarget()){
+        if (population.isThereRobot()){
+          population.nextRobot();
+          origin = population.getRobotPosition();
+          
+        } else {
+          population.getFitness();
+          origin = population.nextGeneration();
+          
+        } 
+      }
+      delay(time);
     } else{
       if (population.isThereRobot()){
         population.nextRobot();
         origin = population.getRobotPosition();
         delay(time);
         //println("nextRobot");
+        //state = 4;
       }else{
         population.getFitness();
         origin = population.nextGeneration();
         delay(time);
-        state = 3;
+        //state = 4;
       }
     }
   }
@@ -89,9 +102,10 @@ void maze() {
         if (map[i][k] == 1) fill(0);
         else fill(255);
         
+        fill(255 - 255*map[i][k]);
+        if (target[0] == i && target[1] == k) fill(255,0,0);
         if (origin[0] == i && origin[1] == k) fill(0,255,0);
-        else if (target[0] == i && target[1] == k) fill(255,0,0);
-        else fill(255 - 255*map[i][k]);
+        
       }
       rect(bx+offset, by+offset, rectSize, rectSize);
     }
@@ -147,8 +161,6 @@ void keyPressed() {
       population.prepare(map,origin,target);
       println("Generation: 1");
       break;
-    case 4:
-      state = 3;
     default:
       time = 500;
     }

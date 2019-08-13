@@ -43,10 +43,17 @@ public class Population{
     return (this.currentRobot < this.robots.size()-1);
   }
   
+  public boolean didRobotGetTarget(){
+    if (this.robots.get(this.currentRobot).getTarget())
+      return true;
+    else
+      return false;
+  }
+  
   public void getFitness(){
     Collections.sort(robots);
     for(Robot r: robots){
-      println("Fitness from " + r.getId()+" = "+ r.getFitness());
+      println("Fitness from " + r.getId()+" : Distance = " + r.getDistance() + " - Steps left = " + r.getSteps() + " | " + r.getFitness());
     }
   }
   
