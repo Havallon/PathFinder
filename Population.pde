@@ -70,16 +70,23 @@ public class Population{
   public void crossOver(){
     ArrayList<Integer> r1 = this.robots.get(0).getGenome();
     ArrayList<Integer> r2 = this.robots.get(1).getGenome();
+    ArrayList<Integer> r3 = this.robots.get(2).getGenome();
     
     int split = new Random().nextInt(r1.size()-1);
     
     for(int k = 2; k < this.robots.size(); k++){
       ArrayList<Integer> son = new ArrayList<Integer>();
       for (int i = 0; i <= split; i++){
-        son.add(r1.get(i));
+        int dad = new Random().nextInt(3);
+        if (dad == 0) son.add(r1.get(i));
+        else if (dad == 1) son.add(r2.get(i));
+        else if (dad == 2) son.add(r3.get(i));
       }
       for(int i = split+1; i < r1.size(); i++){
-        son.add(r2.get(i));
+        int dad = new Random().nextInt(3);
+        if (dad == 0) son.add(r1.get(i));
+        else if (dad == 1) son.add(r2.get(i));
+        else if (dad == 2) son.add(r3.get(i));
       }
       
       int rate = new Random().nextInt(100);

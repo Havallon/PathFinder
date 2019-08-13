@@ -125,7 +125,7 @@ public class Robot implements Comparable{
   }
   
   public boolean canRun(){
-    return (this.currentStep < this.amountStep && alive);
+    return (this.currentStep < this.amountStep);
   }
   
   public int getSteps(){
